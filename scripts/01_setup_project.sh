@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Usage: 01_setup_project.sh <SCRIPT_DIR> <FOLDER_NAME>
-if [[ $# -lt 2 ]]; then
-  echo "Usage: $0 <SCRIPT_DIR> <FOLDER_NAME>" >&2
+# Usage: 01_setup_project.sh <MAIN_DIR> <SCRIPT_DIR> <FOLDER_NAME>
+if [[ $# -lt 3 ]]; then
+  echo "Usage: $0 <MAIN_DIR> <SCRIPT_DIR> <FOLDER_NAME>" >&2
   exit 1
 fi
 
-SCRIPT_DIR="$1"
-FOLDER_NAME="$2"
-MAIN_DIR="$SCRIPT_DIR/$FOLDER_NAME"
+MAIN_DIR="$1"
+SCRIPT_DIR="$2"
+FOLDER_NAME="$3"
 PIPELINE_DIR="$MAIN_DIR/.pipeline"
 MARKER="$PIPELINE_DIR/01_setup_done"
 
@@ -27,11 +27,12 @@ fi
 mkdir -p "$MAIN_DIR"
 
 # Copy configs/templates only if not already present
-if [[ ! -d "$MAIN_DIR/.claude" && -d "$SCRIPT_DIR/.claude" ]]; then
-  cp -R "$SCRIPT_DIR/.claude" "$MAIN_DIR/.claude"
-else
-  echo "01: .claude already exists or source missing" >&2
-fi
+# No longer needed for Gemini CLI extension
+# if [[ ! -d "$MAIN_DIR/.claude" && -d "$SCRIPT_DIR/.claude" ]]; then
+#   cp -R "$SCRIPT_DIR/.claude" "$MAIN_DIR/.claude"
+# else
+#   echo "01: .claude already exists or source missing" >&2
+# fi
 
 if [[ ! -d "$MAIN_DIR/templates" && -d "$SCRIPT_DIR/templates" ]]; then
   cp -R "$SCRIPT_DIR/templates" "$MAIN_DIR/templates"

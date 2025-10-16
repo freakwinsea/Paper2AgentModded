@@ -1,0 +1,10 @@
+{
+  "name": "paper2agent",
+  "version": "1.0.0",
+  "description": "A Gemini CLI extension to automatically transform research papers into interactive AI agents.",
+  "main": "Paper2Agent.sh",
+  "commands": {
+    "paper2agent": "Run the Paper2Agent pipeline"
+  },
+  "contextFileName": "GEMINI.md"
+}

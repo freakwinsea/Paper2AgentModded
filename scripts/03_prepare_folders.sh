@@ -28,6 +28,6 @@ mkdir -p "$MAIN_DIR/reports" \
          "$MAIN_DIR/tests/summary" \
          "$MAIN_DIR/tmp/inputs" \
          "$MAIN_DIR/tmp/outputs" \
-         "$MAIN_DIR/claude_outputs"
+         "$MAIN_DIR/gemini_outputs"
 
 touch "$MARKER"

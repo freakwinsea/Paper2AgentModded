@@ -19,10 +19,11 @@ if [[ -f "$MARKER" ]]; then
   exit 0
 fi
 
-if claude mcp add context7 -- npx -y @upstash/context7-mcp@latest; then
-  touch "$MARKER"
-  echo "04: context7 added" >&2
-else
-  echo "04: warning - failed to add context7 MCP, continuing" >&2
-  # don't create marker on failure
-fi
+# No longer needed for Gemini CLI extension
+# if claude mcp add context7 -- npx -y @upstash/context7-mcp@latest; then
+#   touch "$MARKER"
+#   echo "04: context7 added" >&2
+# else
+#   echo "04: warning - failed to add context7 MCP, continuing" >&2
+#   # don't create marker on failure
+# fi
