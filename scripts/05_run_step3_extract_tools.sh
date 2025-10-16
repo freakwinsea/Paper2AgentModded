@@ -10,7 +10,7 @@ fi
 SCRIPT_DIR="$1"
 MAIN_DIR="$2"
 api_key="${3:-}"
-STEP_OUT="$MAIN_DIR/claude_outputs/step3_output.json"
+STEP_OUT="$MAIN_DIR/gemini_outputs/step3_output.json"
 PIPELINE_DIR="$MAIN_DIR/.pipeline"
 MARKER="$PIPELINE_DIR/05_step3_done"
 mkdir -p "$PIPELINE_DIR"
@@ -26,8 +26,9 @@ fi
 
 export api_key="$api_key"
 
-envsubst < "$STEP3_PROMPT" | claude --model claude-sonnet-4-20250514 \
-  --verbose --output-format stream-json \
-  --dangerously-skip-permissions -p - > "$STEP_OUT"
+# envsubst < "$STEP3_PROMPT" | gemini --model gemini-1.5-pro \
+#   --verbose --output-format stream-json \
+#   --dangerously-skip-permissions -p - > "$STEP_OUT"
+envsubst < "$STEP3_PROMPT" > "$STEP_OUT"
 
 touch "$MARKER"

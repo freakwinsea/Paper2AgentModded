@@ -1,0 +1,9 @@
+prompt = """
+Please execute the Paper2Agent pipeline with the following parameters:
+Project Directory: {{project_dir}}
+GitHub URL: {{github_url}}
+Tutorials: {{tutorials}}
+API Key: {{api_key}}
+
+!{./run_paper2agent.sh --project_dir {{project_dir}} --github_url {{github_url}} --tutorials "{{tutorials}}" --api {{api_key}}}
+"""

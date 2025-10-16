@@ -23,13 +23,13 @@ if [[ -f "$MARKER" ]]; then
 fi
 
 if [[ -f "$TOOL_PY" ]]; then
-  echo "06: found ${TOOL_PY}, adding to local mcp connected to claude-code" >&2
+  echo "06: found ${TOOL_PY}, adding to local mcp" >&2
 fi
 
 # Add (idempotent enough for our purpose) and then call gemini
-fastmcp install claude-code $TOOL_PY --python ${MAIN_DIR}/${repo_name}-env/bin/python
+fastmcp install gemini-cli $TOOL_PY --python ${MAIN_DIR}/${repo_name}-env/bin/python
 
 # Launch client (this is interactive - we still call it)
-claude || echo "06: claude code client exited" >&2
+gemini || echo "06: gemini cli client exited" >&2
 
 touch "$MARKER"

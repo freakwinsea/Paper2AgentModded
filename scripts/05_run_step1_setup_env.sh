@@ -11,7 +11,7 @@ SCRIPT_DIR="$1"
 MAIN_DIR="$2"
 repo_name="$3"
 tutorial_filter="${4:-}"
-STEP_OUT="$MAIN_DIR/claude_outputs/step1_output.json"
+STEP_OUT="$MAIN_DIR/gemini_outputs/step1_output.json"
 PIPELINE_DIR="$MAIN_DIR/.pipeline"
 MARKER="$PIPELINE_DIR/05_step1_done"
 mkdir -p "$PIPELINE_DIR"
@@ -29,11 +29,12 @@ fi
 export github_repo_name="$repo_name"
 export tutorial_filter="$tutorial_filter"
 
-envsubst < "$STEP1_PROMPT" | claude \
-  --model claude-sonnet-4-20250514 \
-  --verbose \
-  --output-format stream-json \
-  --dangerously-skip-permissions \
-  -p - > "$STEP_OUT"
+# envsubst < "$STEP1_PROMPT" | gemini \
+#   --model gemini-1.5-pro \
+#   --verbose \
+#   --output-format stream-json \
+#   --dangerously-skip-permissions \
+#   -p - > "$STEP_OUT"
+envsubst < "$STEP1_PROMPT" > "$STEP_OUT"
 
 touch "$MARKER"

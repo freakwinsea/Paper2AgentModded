@@ -85,11 +85,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 if [[ -z "$GITHUB_REPO_URL" || -z "$FOLDER_NAME" ]]; then
-  echo "Usage: bash Paper2Agent.sh \\" >&2
-  echo "  --project_dir <project_dir> \\" >&2
-  echo "  --github_url <github_repo_url> \\" >&2
-  echo "  --tutorials <tutorial_filter> \\" >&2
-  echo "  --api <api_key>" >&2
+  echo "Usage: /paper2agent --project_dir <project_dir> --github_url <github_repo_url> [--tutorials <tutorial_filter>] [--api <api_key>]" >&2
   echo "" >&2
   echo "  --tutorials: Optional filter for tutorials (supports natural language descriptions)" >&2
   echo "      Examples: 'data visualization', 'ML tutorial', 'preprocessing.ipynb'" >&2
@@ -102,13 +98,13 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 declare -A STEP_STATUS
 
 # 1. Setup project (decide if we should run by checking marker)
-MAIN_DIR="$SCRIPT_DIR/$FOLDER_NAME"
+MAIN_DIR="$(pwd)/$FOLDER_NAME"
 if [[ -f "$MAIN_DIR/.pipeline/01_setup_done" ]]; then
   log_progress 1 "Setup project environment" "skip"
   STEP_STATUS[setup]="skipped"
 else
   log_progress 1 "Setup project environment" "start"
-  MAIN_DIR=$(bash $SCRIPT_DIR/scripts/01_setup_project.sh "$SCRIPT_DIR" "$FOLDER_NAME")
+  bash $SCRIPT_DIR/scripts/01_setup_project.sh "$MAIN_DIR" "$SCRIPT_DIR" "$FOLDER_NAME"
   log_progress 1 "Setup project environment" "complete"
   STEP_STATUS[setup]="executed"
 fi
@@ -124,7 +120,7 @@ if [[ -f "$MAIN_DIR/.pipeline/02_clone_done" ]]; then
   STEP_STATUS[clone]="skipped"
 else
   log_progress 2 "Clone GitHub repository" "start"
-  repo_name=$(bash $SCRIPT_DIR/scripts/02_clone_repo.sh "$MAIN_DIR" "$GITHUB_REPO_URL")
+  cloned_repo_name=$(bash $SCRIPT_DIR/scripts/02_clone_repo.sh "$MAIN_DIR" "$GITHUB_REPO_URL")
   log_progress 2 "Clone GitHub repository" "complete"
   STEP_STATUS[clone]="executed"
 fi
@@ -153,7 +149,7 @@ fi
 
 # 5: Core Paper2Agent pipeline steps
 for i in 1 2 3 4; do
-  OUT="$MAIN_DIR/claude_outputs/step${i}_output.json"
+  OUT="$MAIN_DIR/gemini_outputs/step${i}_output.json"
   MARK="$MAIN_DIR/.pipeline/05_step${i}_done"
 
   # Define step names
@@ -173,7 +169,7 @@ for i in 1 2 3 4; do
       1) bash $SCRIPT_DIR/scripts/05_run_step1_setup_env.sh "$SCRIPT_DIR" "$MAIN_DIR" "$repo_name" "$TUTORIAL_FILTER" ;;
       2) bash $SCRIPT_DIR/scripts/05_run_step2_execute_tutorials.sh    "$SCRIPT_DIR" "$MAIN_DIR" "$API_KEY" ;;
       3) bash $SCRIPT_DIR/scripts/05_run_step3_extract_tools.sh    "$SCRIPT_DIR" "$MAIN_DIR" "$API_KEY" ;;
-      4) bash $SCRIPT_DIR/scripts/05_run_step4_wrap_mcp.sh    "$SCRIPT_DIR" "$MAIN_DIR" ;;
+      4) bash $SCRIPT_DIR/scripts/05_run_step4_wrap_mcp.sh    "$SCRIPT_DIR" "$MAIN_DIR" "$repo_name" ;;
     esac
     log_progress $((4+i)) "$STEP_NAME" "complete"
     STEP_STATUS["step${i}"]="executed"
